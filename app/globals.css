@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #686279;
+  --foreground: #fbfafb;
 }
 
 @theme inline {
@@ -10,13 +10,35 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Palette (sampled from the reference design) */
+  --color-light: #fbfafb; /* headings, input text */
+  --color-muted: #86819e; /* secondary text, placeholders, focus border */
+  --color-page: #686279; /* page background */
+  --color-primary: #6d54b5; /* buttons, accents */
+  --color-field: #41394f; /* input background */
+  --color-field-border: #4d465e; /* input border */
+  --color-card: #2c2638; /* card background */
+  --color-danger: #f87171;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Keep the field colors when the browser autofills, instead of its default blue/yellow background */
+/* Chrome/Edge/Safari: the autofill background can't be overridden, so cover it with an inset shadow */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px --theme(--color-field) inset;
+  box-shadow: 0 0 0 1000px --theme(--color-field) inset;
+  -webkit-text-fill-color: --theme(--color-light);
+  caret-color: --theme(--color-light);
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* Firefox: tints autofilled inputs with a filter instead of a background */
+input:autofill {
+  filter: none;
+  box-shadow: 0 0 0 1000px --theme(--color-field) inset;
 }
 
 body {
