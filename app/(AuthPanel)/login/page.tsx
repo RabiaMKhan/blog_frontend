@@ -84,13 +84,21 @@ export default function LoginPage() {
             onChange={handleChange}
             error={errors.password}
           />
-          <button
-            type="button"
-            onClick={handleForgotPassword}
-            className="self-end text-xs text-muted cursor-pointer transition hover:text-light"
-          >
-            Forgot password?
-          </button>
+          <div className="flex justify-between gap-4">
+            <Link
+              href="/verify-email/send-code"
+              className="text-xs text-muted transition hover:text-light"
+            >
+              Verify email
+            </Link>
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              className="text-xs text-muted cursor-pointer transition hover:text-light"
+            >
+              Forgot password
+            </button>
+          </div>
         </div>
 
         <button

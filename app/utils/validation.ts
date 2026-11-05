@@ -4,10 +4,13 @@ import type {
   LoginFormValues,
   RegisterFormErrors,
   RegisterFormValues,
+  SendCodeFormErrors,
+  SendCodeFormValues,
 } from "./types";
 
 const PASSWORD_MIN_LENGTH = 8;
 const NAME_MAX_LENGTH = 50;
+export const OTP_LENGTH = 6;
 
 const emailSchema = z
   .string()
@@ -39,6 +42,10 @@ export const registerSchema = z.object({
   password: passwordSchema,
 });
 
+export const sendCodeSchema = z.object({
+  email: emailSchema,
+});
+
 // Returns the first error message for each invalid field, or {} when the values are valid.
 function getFieldErrors<T extends Record<string, unknown>>(
   schema: z.ZodType<T>,
@@ -61,4 +68,20 @@ export function validateLoginForm(values: LoginFormValues): LoginFormErrors {
 
 export function validateRegisterForm(values: RegisterFormValues): RegisterFormErrors {
   return getFieldErrors(registerSchema, values);
+}
+
+export function validateSendCodeForm(values: SendCodeFormValues): SendCodeFormErrors {
+  return getFieldErrors(sendCodeSchema, values);
+}
+
+const otpSchema = z
+  .string()
+  .min(1, "Enter the verification code")
+  .length(OTP_LENGTH, `Enter all ${OTP_LENGTH} digits of the code`)
+  .regex(/^\d+$/, "The code can only contain numbers");
+
+// Returns the error message, or undefined when the code is valid.
+export function validateOtp(code: string): string | undefined {
+  const result = otpSchema.safeParse(code);
+  return result.success ? undefined : result.error.issues[0].message;
 }

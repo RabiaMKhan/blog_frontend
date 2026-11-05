@@ -2,6 +2,7 @@
 
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import SocialAuthButtons from "@/app/components/SocialAuthButtons";
 import TextInput from "@/app/components/TextInput";
 import type { RegisterFormErrors, RegisterFormValues } from "@/app/utils/types";
@@ -17,6 +18,7 @@ const initialValues: RegisterFormValues = {
 export default function RegisterPage() {
   const [values, setValues] = useState<RegisterFormValues>(initialValues);
   const [errors, setErrors] = useState<RegisterFormErrors>({});
+  const router = useRouter();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -32,8 +34,9 @@ export default function RegisterPage() {
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
 
-    // TODO: call the register API
+    // TODO: call the register API, then redirect only if it succeeds
     console.log("Register with", values);
+    router.push(`/verify-email?email=${encodeURIComponent(values.email.trim())}`);
   };
 
   const handleGoogleSignUp = () => {
